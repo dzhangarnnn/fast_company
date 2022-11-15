@@ -5,13 +5,11 @@ const Users = () => {
     const [users, setUsers] = useState(api.users.fetchAll());
 
     const getQualitieClasses = (qualitie) => {
-        let classes = `badge m-2 bg-${qualitie.color}`
-        return classes;
+        return classes = `badge m-2 bg-${qualitie.color}`;  
     };
 
     const renderQualitiesBadges = (user) => {
         return user.qualities.map((qualitie) => (
-           
             <span
                 key={qualitie._id} 
                 className= {getQualitieClasses(qualitie)}
@@ -46,15 +44,11 @@ const Users = () => {
         setUsers(prevState => prevState.filter((user) => user._id !== userId));
     };
     const renderPhrase = (number) => {
-        if (number > 4 && number < 22) {
-            return (<span className="h1 badge bg-primary">{number} человек тусанет с тобой сегодня</span>);
-        } else if (number > 1) {
-            return (<span className="badge bg-primary">{number} человека тусанут с тобой сегодня</span>);
-        } else if (number === 1) {
-            return (<span className="badge bg-primary">{number} человек тусанет с тобой сегодня</span>);
-        } else {
-            return (<span className="badge bg-danger">Никто с тобой не тусанет</span>)
-        }
+        const lastOne = Number(number.toString().slice(-1));
+        if (number > 4 && number < 15) return "человек тусанет";
+        if ([2, 3, 4].indexOf(lastOne) >= 0) return "человека тусанут";
+        if (lastOne === 1) return "человек тусанет";
+        return "человек тусанет";
     };    
 
     const renderTable = () => {
@@ -79,7 +73,15 @@ const Users = () => {
        
     return (
         <> 
-            {renderPhrase(users.length)}
+            <h2>
+                <span
+                    className={"badge " + (users.length > 0 ? "bg-primary" : "bg-danger")}
+                >
+                    {users.length > 0
+                        ? `${users.length + " " + renderPhrase(users.length)} с тобой сегодня`
+                        : "Никто с тобой не тусанет"}
+                </span>
+            </h2>
             {renderTable()}
         </>
      );
