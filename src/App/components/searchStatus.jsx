@@ -1,7 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-const SearchStatus = ({ props }) => {
-    const { length } = props;
+const SearchStatus = ({ length }) => {
     const renderPhrase = (number) => {
         const lastOne = Number(number.toString().slice(-1));
         if (number > 4 && number < 15) return "человек тусанет";
@@ -27,6 +27,10 @@ const SearchStatus = ({ props }) => {
             </h2>
         </>
     );
+};
+
+SearchStatus.propTypes = {
+    length: PropTypes.number.isRequired
 };
 
 export default SearchStatus;
