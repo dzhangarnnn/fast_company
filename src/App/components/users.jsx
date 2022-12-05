@@ -27,11 +27,18 @@ const Users = ({ users: allUsers, ...rest }) => {
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
-
     const filteredUsers = selectedProf
-        ? allUsers.filter((user) => user.profession === selectedProf)
+        ? (Array.isArray(professions)
+            ? allUsers.filter(
+                (user) => user.profession.name === selectedProf.name)
+            : allUsers.filter((user) => user.profession === selectedProf))
         : allUsers;
     const count = filteredUsers.length;
+    useEffect(() => {
+        if (currentPage === count / pageSize + 1) {
+            setCurrentPage(count / pageSize);
+        }
+    }, [count]);
     const userCrop = paginate(filteredUsers, currentPage, pageSize);
     const clearFilter = () => {
         setSelectedProf();
