@@ -34,6 +34,11 @@ const Users = ({ users: allUsers, ...rest }) => {
             : allUsers.filter((user) => user.profession === selectedProf))
         : allUsers;
     const count = filteredUsers.length;
+    useEffect(() => {
+        if (currentPage === count / pageSize + 1) {
+            setCurrentPage(count / pageSize);
+        }
+    }, [count]);
     const userCrop = paginate(filteredUsers, currentPage, pageSize);
     const clearFilter = () => {
         setSelectedProf();
