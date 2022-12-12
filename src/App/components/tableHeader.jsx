@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 const TableHeader = ({ onSort, selectedSort, columns }) => {
+    const [showCarret, setShowCarret] = useState(null);
+
     const handleSort = (item) => {
+        setShowCarret(true);
         if (selectedSort.path === item) {
             onSort({
                 ...selectedSort,
@@ -12,6 +15,16 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             onSort({ path: item, order: "asc" });
         }
     };
+    const carret = (item) => {
+        if (selectedSort.path === item) {
+            if (selectedSort.order === "asc") {
+                return <i className="bi bi-caret-down-fill"></i>;
+            } else {
+                return <i className="bi bi-caret-up-fill"></i>;
+            }
+        }
+    };
+
     return (
         <thead>
             <tr>
@@ -26,7 +39,7 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                         {...{ role: columns[column].path && "button" }}
                         scope="col"
                     >
-                        {columns[column].name}
+                        {columns[column].name}{showCarret && carret(columns[column].path)}
                     </th>
                 ))}
             </tr>
