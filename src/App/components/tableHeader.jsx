@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 const TableHeader = ({ onSort, selectedSort, columns }) => {
-    const [showCarret, setShowCarret] = useState(null);
-
-    const handleSort = (item) => {
-        setShowCarret(true);
+    const handleSort = item => {
         if (selectedSort.path === item) {
             onSort({
                 ...selectedSort,
@@ -15,20 +12,21 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
             onSort({ path: item, order: "asc" });
         }
     };
-    const carret = (item) => {
-        if (selectedSort.path === item) {
+    const renderSortArrow = (selectedSort, currentPath) => {
+        if (selectedSort.path === currentPath) {
             if (selectedSort.order === "asc") {
                 return <i className="bi bi-caret-down-fill"></i>;
             } else {
                 return <i className="bi bi-caret-up-fill"></i>;
             }
         }
+        return null;
     };
 
     return (
         <thead>
             <tr>
-                {Object.keys(columns).map((column) => (
+                {Object.keys(columns).map(column => (
                     <th
                         key={column}
                         onClick={
@@ -39,7 +37,8 @@ const TableHeader = ({ onSort, selectedSort, columns }) => {
                         {...{ role: columns[column].path && "button" }}
                         scope="col"
                     >
-                        {columns[column].name}{showCarret && carret(columns[column].path)}
+                        {columns[column].name}
+                        {renderSortArrow(selectedSort, columns[column].path)}
                     </th>
                 ))}
             </tr>
