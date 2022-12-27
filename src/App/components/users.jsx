@@ -59,16 +59,20 @@ const Users = () => {
             ? users.filter(
                 user =>
                     JSON.stringify(user.profession) ===
-                  JSON.stringify(selectedProf)
+                      JSON.stringify(selectedProf)
             )
             : users;
         const count = filteredUsers.length;
-        // useEffect(() => {
-        //     if (currentPage === count / pageSize + 1) {
-        //         setCurrentPage(count / pageSize);
-        //     }
-        // }, [count]);
-        const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
+
+        if (currentPage === count / pageSize + 1) {
+            setCurrentPage(count / pageSize);
+        }
+
+        const sortedUsers = _.orderBy(
+            filteredUsers,
+            [sortBy.path],
+            [sortBy.order]
+        );
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
         const clearFilter = () => {
             setSelectedProf();
@@ -87,7 +91,7 @@ const Users = () => {
                             className="btn btn-secondary mt-2"
                             onClick={clearFilter}
                         >
-                        Очистить
+                            Очистить
                         </button>
                     </div>
                 )}
