@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 import api from "../../api";
 import QualitiesList from "./qualitiesList";
 
-const UserCard = () => {
-    const { userId } = useParams();
+const UserPage = ({ userId }) => {
     const [user, setUser] = useState();
     const history = useHistory();
 
@@ -37,4 +37,8 @@ const UserCard = () => {
     return "loading...";
 };
 
-export default UserCard;
+UserPage.propTypes = {
+    userId: PropTypes.string.isRequired
+};
+
+export default UserPage;

@@ -1,10 +1,10 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
-import Login from "./components/login";
-import Main from "./components/main";
+import { Route, Switch, Redirect } from "react-router-dom";
+import Login from "./layouts/login";
+import Main from "./layouts/main";
 import NavBar from "./components/navBar";
-import UserCard from "./components/userCard";
-import Users from "./components/users";
+// import UserCard from "./components/userCard";
+import Users from "./layouts/users";
 
 function App() {
     return (
@@ -13,8 +13,8 @@ function App() {
             <Switch>
                 <Route exact path="/" component={Main} />
                 <Route path="/login" component={Login} />
-                <Route path="/users/:userId" component={UserCard} />
-                <Route path="/users" component={Users} />
+                <Route path="/users/:userId?" component={Users} />
+                <Redirect to='/'/>
             </Switch>
         </>
     );
