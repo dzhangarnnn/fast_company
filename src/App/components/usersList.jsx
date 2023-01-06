@@ -7,12 +7,14 @@ import api from "../../api";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
+import SearchUsers from "./searchUsers";
 
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [searchUsers, setSearchUsers] = useState("");
 
     const pageSize = 8;
 
@@ -44,6 +46,7 @@ const UsersList = () => {
 
     const handleProfessionSelect = item => {
         setSelectedProf(item);
+        setSearchUsers("");
     };
 
     const handlePageChange = pageIndex => {
@@ -54,6 +57,11 @@ const UsersList = () => {
         setSortBy(item);
     };
 
+    const handleSearchChange = e => {
+        setSearchUsers(e.target.value);
+        setSelectedProf();
+    };
+
     if (users) {
         const filteredUsers = selectedProf
             ? users.filter(
@@ -61,7 +69,9 @@ const UsersList = () => {
                     JSON.stringify(user.profession) ===
                     JSON.stringify(selectedProf)
             )
-            : users;
+            : users.filter(user =>
+                user.name.toLowerCase().includes(searchUsers.toLowerCase())
+            );
         const count = filteredUsers.length;
 
         if (currentPage === count / pageSize + 1) {
@@ -97,6 +107,7 @@ const UsersList = () => {
                 )}
                 <div className="d-flex flex-column">
                     <SearchStatus length={count} />
+                    <SearchUsers onChange={handleSearchChange} value={searchUsers}/>
                     {count > 0 && (
                         <UserTable
                             users={userCrop}
