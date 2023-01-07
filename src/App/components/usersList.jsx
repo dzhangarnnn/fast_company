@@ -60,6 +60,7 @@ const UsersList = () => {
     const handleSearchChange = e => {
         setSearchUsers(e.target.value);
         setSelectedProf();
+        setCurrentPage(1);
     };
 
     if (users) {
@@ -70,7 +71,7 @@ const UsersList = () => {
                     JSON.stringify(selectedProf)
             )
             : users.filter(user =>
-                user.name.toLowerCase().includes(searchUsers.toLowerCase())
+                user.name.toLowerCase().includes(searchUsers.toLowerCase().trim())
             );
         const count = filteredUsers.length;
 
