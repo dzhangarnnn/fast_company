@@ -1,15 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const SearchUsers = ({ onChange, value }) => {
+const SearchUsers = ({ onChange, value, type, placeholder }) => {
     return (
         <form>
             <div className="input-group mb-3">
                 <input
-                    type="search"
-                    id="search"
-                    name="search"
-                    placeholder="search..."
+                    type={type}
+                    id={type}
+                    name={type}
+                    placeholder={placeholder}
                     value={value}
                     onChange={onChange}
                     className="form-control"
@@ -20,7 +20,9 @@ const SearchUsers = ({ onChange, value }) => {
 };
 SearchUsers.propTypes = {
     onChange: PropTypes.func,
-    value: PropTypes.string
+    value: PropTypes.string,
+    type: PropTypes.string,
+    placeholder: PropTypes.string
 };
 
 export default SearchUsers;
