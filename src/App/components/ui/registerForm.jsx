@@ -43,6 +43,8 @@ const RegisterForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
+        console.log(target);
+        console.log(data);
     };
 
     const validatorConfig = {

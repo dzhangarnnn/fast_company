@@ -12,6 +12,7 @@ const SelectField = ({
 }) => {
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value });
+        console.log(target);
     };
 
     const getInputClasses = () => {
@@ -38,7 +39,7 @@ const SelectField = ({
                     {defaultOption}
                 </option>
                 {optionsArray.length > 0 &&
-                    optionsArray.map((option) => (
+                    optionsArray.map(option => (
                         <option value={option.value} key={option.value}>
                             {option.label}
                         </option>
