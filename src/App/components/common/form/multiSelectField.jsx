@@ -23,7 +23,7 @@ const MultiSelectField = ({ options, onChange, name, label, defaultValue }) => {
                 classNamePrefix="select"
                 onChange={handleChange}
                 name={name}
-                defaulValue={defaultValue}
+                defaultValue={defaultValue}
             />
         </div>
     );
