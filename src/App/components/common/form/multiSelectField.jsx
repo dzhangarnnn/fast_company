@@ -33,7 +33,7 @@ MultiSelectField.propTypes = {
     onChange: PropTypes.func,
     name: PropTypes.string,
     label: PropTypes.string,
-    defaultValue: PropTypes.string
+    defaultValue: PropTypes.array
 };
 
 export default MultiSelectField;

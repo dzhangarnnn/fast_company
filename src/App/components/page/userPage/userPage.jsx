@@ -1,58 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import api from "../../../../api";
 import Qualities from "../../ui/qualities";
-import EditForm from "../../common/form/editForm";
+import { useHistory } from "react-router-dom";
 
 const UserPage = ({ userId }) => {
-    const [user, setUser] = useState();
-    const { editPage } = useParams();
     const history = useHistory();
-
+    const [user, setUser] = useState();
     useEffect(() => {
         api.users.getById(userId).then(data => setUser(data));
     }, []);
-
-    const goToUsers = () => {
-        history.replace(`/users/${userId}/edit`);
+    const handleClick = () => {
+        history.push(history.location.pathname + "/edit");
     };
-
     if (user) {
         return (
             <div>
-                {editPage !== "edit" ? (
-                    <>
-                        <h1>{user.name}</h1>
-                        <h2>Профессия: {user.profession.name}</h2>
-                        <Qualities qualities={user.qualities} />
-                        <p>completedMeetings: {user.completedMeetings}</p>
-                        <h2>Rate: {user.rate}</h2>
-                        <button
-                            onClick={() => {
-                                goToUsers();
-                            }}
-                        >
-                            Изменить
-                        </button>
-                    </>
-                ) : (
-                    <div className="container mt-5">
-                        <div className="row">
-                            <div className="col-md-6 offset-md-3 shadow p-4">
-                                <EditForm
-                                    id={userId}
-                                    user={user}
-                                    setUser={setUser}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )}
+                <h1> {user.name}</h1>
+                <h2>Профессия: {user.profession.name}</h2>
+                <Qualities qualities={user.qualities} />
+                <p>completedMeetings: {user.completedMeetings}</p>
+                <h2>Rate: {user.rate}</h2>
+                <button onClick={handleClick}>Изменить</button>
             </div>
         );
+    } else {
+        return <h1>Loading</h1>;
     }
-    return "loading...";
 };
 
 UserPage.propTypes = {
