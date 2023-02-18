@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
+<<<<<<< HEAD
 import API from "../../../api";
+=======
+import API from "../../../../api";
+>>>>>>> d3ad0342b85ca67d592c905426c6cc651fbdd2a0
 import SelectField from "../form/selectField";
 import TextAreaField from "../form/textAreaField";
 import { validator } from "../../../utils/validator";
@@ -10,8 +14,13 @@ const AddCommentForm = ({ onSubmit }) => {
     const [data, setData] = useState(initialData);
     const [users, setUsers] = useState({});
     const [errors, setErrors] = useState({});
+<<<<<<< HEAD
     const handleChange = (target) => {
         setData((prevState) => ({
+=======
+    const handleChange = target => {
+        setData(prevState => ({
+>>>>>>> d3ad0342b85ca67d592c905426c6cc651fbdd2a0
             ...prevState,
             [target.name]: target.value
         }));
@@ -41,7 +50,11 @@ const AddCommentForm = ({ onSubmit }) => {
         setData(initialData);
         setErrors({});
     };
+<<<<<<< HEAD
     const handleSubmit = (e) => {
+=======
+    const handleSubmit = e => {
+>>>>>>> d3ad0342b85ca67d592c905426c6cc651fbdd2a0
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
@@ -50,7 +63,11 @@ const AddCommentForm = ({ onSubmit }) => {
     };
     const arrayOfUsers =
         users &&
+<<<<<<< HEAD
         Object.keys(users).map((userId) => ({
+=======
+        Object.keys(users).map(userId => ({
+>>>>>>> d3ad0342b85ca67d592c905426c6cc651fbdd2a0
             label: users[userId].name,
             value: users[userId]._id
         }));

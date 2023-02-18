@@ -11,6 +11,10 @@ export function validator(data, config) {
             }
             break;
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> d3ad0342b85ca67d592c905426c6cc651fbdd2a0
         case "isEmail": {
             const emailRegExp = /^\S+@\S+\.\S+$/g;
             statusValidate = !emailRegExp.test(data);
@@ -38,8 +42,13 @@ export function validator(data, config) {
     for (const fieldName in data) {
         for (const validateMethod in config[fieldName]) {
             const error = validate(
+<<<<<<< HEAD
                 validateMethod,
                 data[fieldName],
+=======
+                validateMethod, // 'isRequired'
+                data[fieldName], // 'email' или 'password'
+>>>>>>> d3ad0342b85ca67d592c905426c6cc651fbdd2a0
                 config[fieldName][validateMethod]
             );
             if (error && !errors[fieldName]) {
