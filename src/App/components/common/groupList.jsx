@@ -8,28 +8,15 @@ const GroupList = ({
     onItemSelect,
     selectedItem
 }) => {
-    return (
-        <ul className="list-group">
-            {Array.isArray(items)
-                ? items.map((item) => (
-                    <li
-                        key={item[valueProperty]}
-                        className={
-                            "list-group-item" +
-                              (item === selectedItem ? " active" : "")
-                        }
-                        onClick={() => onItemSelect(item)}
-                        role="button"
-                    >
-                        {item[contentProperty]}
-                    </li>
-                ))
-                : Object.keys(items).map((item) => (
+    if (!Array.isArray(items)) {
+        return (
+            <ul className="list-group">
+                {Object.keys(items).map((item) => (
                     <li
                         key={items[item][valueProperty]}
                         className={
                             "list-group-item" +
-                              (items[item] === selectedItem ? " active" : "")
+                            (items[item] === selectedItem ? " active" : "")
                         }
                         onClick={() => onItemSelect(items[item])}
                         role="button"
@@ -37,6 +24,24 @@ const GroupList = ({
                         {items[item][contentProperty]}
                     </li>
                 ))}
+            </ul>
+        );
+    }
+    return (
+        <ul className="list-group">
+            {items.map((item) => (
+                <li
+                    key={item[valueProperty]}
+                    className={
+                        "list-group-item" +
+                        (item === selectedItem ? " active" : "")
+                    }
+                    onClick={() => onItemSelect(item)}
+                    role="button"
+                >
+                    {item[contentProperty]}
+                </li>
+            ))}
         </ul>
     );
 };

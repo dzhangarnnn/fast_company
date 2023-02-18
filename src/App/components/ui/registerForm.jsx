@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import TextField from "../common/form/textField";
+import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
-import api from "../../../api";
+import TextField from "../common/form/textField";
+import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
@@ -20,33 +20,52 @@ const RegisterForm = () => {
     const [professions, setProfession] = useState([]);
     const [errors, setErrors] = useState({});
 
+    const getProfessionById = (id) => {
+        for (const prof of professions) {
+            if (prof.value === id) {
+                return { _id: prof.value, name: prof.label };
+            }
+        }
+    };
+    const getQualities = (elements) => {
+        const qualitiesArray = [];
+        for (const elem of elements) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality].value) {
+                    qualitiesArray.push({
+                        _id: qualities[quality].value,
+                        name: qualities[quality].label,
+                        color: qualities[quality].color
+                    });
+                }
+            }
+        }
+        return qualitiesArray;
+    };
+
     useEffect(() => {
-        api.professions.fetchAll().then(data => {
-            const professionsList = Object.keys(data).map(professionName => ({
+        api.professions.fetchAll().then((data) => {
+            const professionsList = Object.keys(data).map((professionName) => ({
                 label: data[professionName].name,
                 value: data[professionName]._id
             }));
             setProfession(professionsList);
         });
-        api.qualities.fetchAll().then(data => {
-            const qualitiesList = Object.keys(data).map(optionName => ({
-                label: data[optionName].name,
+        api.qualities.fetchAll().then((data) => {
+            const qualitiesList = Object.keys(data).map((optionName) => ({
                 value: data[optionName]._id,
+                label: data[optionName].name,
                 color: data[optionName].color
             }));
             setQualities(qualitiesList);
         });
     }, []);
-
-    const handleChange = target => {
-        setData(prevState => ({
+    const handleChange = (target) => {
+        setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
-        console.log(target);
-        console.log(data);
     };
-
     const validatorConfig = {
         email: {
             isRequired: {
@@ -64,7 +83,7 @@ const RegisterForm = () => {
                 message: "Пароль должен содержать хотя бы одну заглавную букву"
             },
             isContainDigit: {
-                message: "Пароль должен содержать хотя бы одну цифру"
+                message: "Пароль должен содержать хотя бы одно число"
             },
             min: {
                 message: "Пароль должен состоять минимум из 8 символов",
@@ -73,53 +92,27 @@ const RegisterForm = () => {
         },
         profession: {
             isRequired: {
-                message: "Обязательно выберите Вашу профессию"
+                message: "Обязательно выберите вашу профессию"
             }
         },
         licence: {
             isRequired: {
                 message:
-                    "Вы не можете использовать на сервис без подтверждения лицензионного соглашения"
+                    "Вы не можете использовать наш сервис без подтверждения лицензионного соглашения"
             }
         }
     };
-
     useEffect(() => {
         validate();
     }, [data]);
-
     const validate = () => {
         const errors = validator(data, validatorConfig);
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
-
     const isValid = Object.keys(errors).length === 0;
 
-    const getProfessionById = id => {
-        for (const prof of professions) {
-            if (prof.value === id) {
-                return { _id: prof.value, name: prof.label };
-            }
-        }
-    };
-    const getQualities = elements => {
-        const qualitiesArray = [];
-        for (const elem of elements) {
-            for (const quality in qualities) {
-                if (elem.value === qualities[quality].value) {
-                    qualitiesArray.push({
-                        _id: qualities[quality].value,
-                        name: qualities[quality].label,
-                        color: qualities[quality].color
-                    });
-                }
-            }
-        }
-        return qualitiesArray;
-    };
-
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
@@ -130,7 +123,6 @@ const RegisterForm = () => {
             qualities: getQualities(qualities)
         });
     };
-
     return (
         <form onSubmit={handleSubmit}>
             <TextField
@@ -149,43 +141,44 @@ const RegisterForm = () => {
                 error={errors.password}
             />
             <SelectField
+                label="Выбери свою профессию"
                 defaultOption="Choose..."
                 options={professions}
-                onChange={handleChange}
                 name="profession"
+                onChange={handleChange}
                 value={data.profession}
                 error={errors.profession}
-                label="Выберите Вашу профессию"
             />
             <RadioField
                 options={[
                     { name: "Male", value: "male" },
-                    { name: "Female", value: "female" }
+                    { name: "Female", value: "female" },
+                    { name: "Other", value: "other" }
                 ]}
                 value={data.sex}
                 name="sex"
                 onChange={handleChange}
-                label="Выберите Ваш пол"
+                label="Выберите ваш пол"
             />
             <MultiSelectField
                 options={qualities}
                 onChange={handleChange}
-                defaulValue={data.qualities}
+                defaultValue={data.qualities}
                 name="qualities"
-                label="Выберите Ваши качества"
+                label="Выберите ваши качества"
             />
             <CheckBoxField
-                name="licence"
                 value={data.licence}
                 onChange={handleChange}
+                name="licence"
                 error={errors.licence}
             >
                 Подтвердить <a>лицензионное соглашение</a>
             </CheckBoxField>
             <button
+                className="btn btn-primary w-100 mx-auto"
                 type="submit"
                 disabled={!isValid}
-                className="btn btn-primary w-100 mx-auto"
             >
                 Submit
             </button>

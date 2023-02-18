@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { validator } from "../../../utils/validator";
-import api from "../../../../api";
+import api from "../../../api";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
+import BackHistoryButton from "../../common/backButton";
 
 const EditUserPage = () => {
     const { userId } = useParams();
@@ -21,14 +22,14 @@ const EditUserPage = () => {
     const [professions, setProfession] = useState([]);
     const [qualities, setQualities] = useState([]);
     const [errors, setErrors] = useState({});
-    const getProfessionById = id => {
+    const getProfessionById = (id) => {
         for (const prof of professions) {
             if (prof.value === id) {
                 return { _id: prof.value, name: prof.label };
             }
         }
     };
-    const getQualities = elements => {
+    const getQualities = (elements) => {
         const qualitiesArray = [];
         for (const elem of elements) {
             for (const quality in qualities) {
@@ -43,7 +44,7 @@ const EditUserPage = () => {
         }
         return qualitiesArray;
     };
-    const handleSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
@@ -54,35 +55,35 @@ const EditUserPage = () => {
                 profession: getProfessionById(profession),
                 qualities: getQualities(qualities)
             })
-            .then(data => history.push(`/users/${data._id}`));
+            .then((data) => history.push(`/users/${data._id}`));
         console.log({
             ...data,
             profession: getProfessionById(profession),
             qualities: getQualities(qualities)
         });
     };
-    const transformData = data => {
-        return data.map(qual => ({ label: qual.name, value: qual._id }));
+    const transformData = (data) => {
+        return data.map((qual) => ({ label: qual.name, value: qual._id }));
     };
     useEffect(() => {
         setIsLoading(true);
         api.users.getById(userId).then(({ profession, qualities, ...data }) =>
-            setData(prevState => ({
+            setData((prevState) => ({
                 ...prevState,
                 ...data,
                 qualities: transformData(qualities),
                 profession: profession._id
             }))
         );
-        api.professions.fetchAll().then(data => {
-            const professionsList = Object.keys(data).map(professionName => ({
+        api.professions.fetchAll().then((data) => {
+            const professionsList = Object.keys(data).map((professionName) => ({
                 label: data[professionName].name,
                 value: data[professionName]._id
             }));
             setProfession(professionsList);
         });
-        api.qualities.fetchAll().then(data => {
-            const qualitiesList = Object.keys(data).map(optionName => ({
+        api.qualities.fetchAll().then((data) => {
+            const qualitiesList = Object.keys(data).map((optionName) => ({
                 value: data[optionName]._id,
                 label: data[optionName].name,
                 color: data[optionName].color
@@ -112,8 +113,8 @@ const EditUserPage = () => {
     useEffect(() => {
         validate();
     }, [data]);
-    const handleChange = target => {
-        setData(prevState => ({
+    const handleChange = (target) => {
+        setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
@@ -126,6 +127,7 @@ const EditUserPage = () => {
     const isValid = Object.keys(errors).length === 0;
     return (
         <div className="container mt-5">
+            <BackHistoryButton />
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
                     {!isLoading && Object.keys(professions).length > 0 ? (

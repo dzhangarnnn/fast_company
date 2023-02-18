@@ -6,13 +6,12 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
 
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value });
-        console.log(target);
     };
     const getInputClasses = () => {
         return "form-control" + (error ? " is-invalid" : "");
     };
     const toggleShowPassword = () => {
-        setShowPassword(prevState => !prevState);
+        setShowPassword((prevState) => !prevState);
     };
     return (
         <div className="mb-4">
@@ -47,7 +46,6 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
 TextField.defaultProps = {
     type: "text"
 };
-
 TextField.propTypes = {
     label: PropTypes.string,
     type: PropTypes.string,
