@@ -1,10 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-<<<<<<< HEAD
-=======
-
->>>>>>> d3ad0342b85ca67d592c905426c6cc651fbdd2a0
 const UserCard = ({ user }) => {
     const history = useHistory();
     const handleClick = () => {
@@ -26,15 +22,8 @@ const UserCard = ({ user }) => {
                         )
                             .toString(36)
                             .substring(7)}.svg`}
-<<<<<<< HEAD
                         className="rounded-circle"
                         width="150"
-=======
-                        className="rounded-circle shadow-1-strong me-3"
-                        alt="avatar"
-                        width="65"
-                        height="65"
->>>>>>> d3ad0342b85ca67d592c905426c6cc651fbdd2a0
                     />
                     <div className="mt-3">
                         <h4>{user.name}</h4>
