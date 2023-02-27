@@ -37,15 +37,17 @@ export const QualityProvider = ({ children }) => {
     }
 
     function getQuality(id) {
-        return qualities.find((q) => q._id === id);
+        return qualities.find(q => q._id === id);
     }
     function errorCatcher(error) {
         const { message } = error.response.data;
         setError(message);
     }
-    return (<QualityContext.Provider value={{ isLoading, qualities, getQuality }}>
-        {children}
-    </QualityContext.Provider>);
+    return (
+        <QualityContext.Provider value={{ isLoading, qualities, getQuality }}>
+            {children}
+        </QualityContext.Provider>
+    );
 };
 
 QualityProvider.propTypes = {
