@@ -7,33 +7,32 @@ import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
 import { useProfessions } from "../../../hooks/useProfession";
-import { useQualities } from "../../../hooks/useQualities";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import {
+    getQualities,
+    getQualitiesLoadingStatus
+} from "../../../store/qualities";
 
 const EditUserPage = () => {
     const { userId } = useParams();
     const history = useHistory();
-    const { currentUser, updateUser } = useAuth();
-    const [isLoading, setIsLoading] = useState(false);
-    const [data, setData] = useState({
-        name: "",
-        email: "",
-        profession: "",
-        sex: "male",
-        qualities: []
-    });
+    const { currentUser, updateUserData } = useAuth();
+    const [isLoading, setIsLoading] = useState(true);
+    const [data, setData] = useState();
     useEffect(() => {
         if (userId !== currentUser._id) {
             history.push(`/users/${currentUser._id}/edit`);
         }
     }, []);
-    const { professions } = useProfessions();
-    const { qualities } = useQualities();
+    const { professions, isLoading: professionsLoading } = useProfessions();
+    const qualities = useSelector(getQualities());
+    const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
     const professionsList = professions.map(p => ({
         label: p.name,
         value: p._id
     }));
-    // console.log(professionsList);
+
     const qualitiesList = qualities.map(q => ({
         label: q.name,
         value: q._id,
@@ -43,29 +42,38 @@ const EditUserPage = () => {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        setIsLoading(true);
-        setData({
-            name: currentUser.name,
-            email: currentUser.email,
-            profession: currentUser.profession,
-            sex: currentUser.sex,
-            qualities: getQualities(currentUser.qualities)
-        });
-        setIsLoading(false);
-    }, []);
-    console.log(data.qualities);
+        if (!professionsLoading && !qualitiesLoading && currentUser && !data) {
+            setData({
+                ...currentUser,
+                qualities: transformData(currentUser.qualities)
+            });
+        }
+    }, [professionsLoading, qualitiesLoading, currentUser, data]);
+    useEffect(() => {
+        if (data && isLoading) {
+            setIsLoading(false);
+        }
+    }, [data]);
 
-    function getQualities(elements) {
+    function getQualitiesByIds(qualitiesIds) {
         const qualitiesArray = [];
-        for (const elem of elements) {
-            for (const quality of qualitiesList) {
-                if (elem === quality.value) {
+        for (const qualId of qualitiesIds) {
+            for (const quality of qualities) {
+                if (quality._id === qualId) {
                     qualitiesArray.push(quality);
                 }
             }
         }
         return qualitiesArray;
     }
+    const transformData = data => {
+        const result = getQualitiesByIds(data).map(qual => ({
+            label: qual.name,
+            value: qual._id,
+            color: qual.color
+        }));
+        return result;
+    };
 
     const handleSubmit = async e => {
         e.preventDefault();
@@ -77,10 +85,7 @@ const EditUserPage = () => {
         };
 
         try {
-            await updateUser({
-                ...currentUser,
-                ...newData
-            });
+            await updateUserData(newData);
             history.push(`/users/${currentUser._id}`);
         } catch (error) {
             setErrors(error);
@@ -122,7 +127,7 @@ const EditUserPage = () => {
             <BackHistoryButton />
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    {!isLoading && professionsList.length > 0 && qualitiesList.length > 0 ? (
+                    {!isLoading ? (
                         <form onSubmit={handleSubmit}>
                             <TextField
                                 label="Имя"
@@ -161,7 +166,7 @@ const EditUserPage = () => {
                             <MultiSelectField
                                 options={qualitiesList}
                                 onChange={handleChange}
-                                defaultValue={getQualities(currentUser.qualities)}
+                                defaultValue={data.qualities}
                                 name="qualities"
                                 label="Выберите ваши качества"
                             />
