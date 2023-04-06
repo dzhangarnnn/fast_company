@@ -4,6 +4,12 @@ module.exports = {
         es2021: true
     },
     extends: ["plugin:react/recommended", "standard"],
+    // extends: [
+    //     "eslint:recommended",
+    //     "plugin:@typescript-eslint/recommended",
+    //     "plugin:storybook/recommended",
+    //     "prettier"
+    // ],
     overrides: [],
     parserOptions: {
         ecmaVersion: "latest",
@@ -11,7 +17,8 @@ module.exports = {
     },
     plugins: ["react"],
     rules: {
-        indent: ["error", 4],
+        // indent: ["error", 4, { MemberExpression: 1 }],
+        indent: "off",
         semi: [2, "always"],
         "space-before-function-paren": [
             "error",
