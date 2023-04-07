@@ -6,7 +6,7 @@ import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     getQualities,
     getQualitiesLoadingStatus
@@ -15,13 +15,12 @@ import {
     getProfessions,
     getProfessionsLoadingStatus
 } from "../../../store/professions";
-import { getCurrentUserData } from "../../../store/users";
-import { useAuth } from "../../../hooks/useAuth";
+import { getCurrentUserData, updateUserData } from "../../../store/users";
 
 const EditUserPage = () => {
     const { userId } = useParams();
     const history = useHistory();
-    const { updateUserData } = useAuth;
+    const dispatch = useDispatch();
     const currentUser = useSelector(getCurrentUserData());
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState();
@@ -89,12 +88,7 @@ const EditUserPage = () => {
             ...data,
             qualities: data.qualities.map((q) => q.value)
         };
-        try {
-            updateUserData(newData);
-            history.push(`/users/${currentUser._id}`);
-        } catch (error) {
-            setErrors(error);
-        }
+        dispatch(updateUserData(newData, currentUser._id));
     };
 
     const validatorConfig = {
