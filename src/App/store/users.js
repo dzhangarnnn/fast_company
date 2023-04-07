@@ -88,6 +88,7 @@ const {
 const userCreateRequested = createAction("users/userCreateRequested");
 const createUserFailed = createAction("users/createUserFailed");
 const userUpdateRequested = createAction("users/userUpdateRequested");
+const userUpdateFailed = createAction("users/userUpdateFailed");
 
 export const login =
     ({ payload, redirect }) =>
@@ -173,7 +174,7 @@ export const updateUserData = (data, currentUserId) => async (dispatch) => {
         dispatch(userUpdated(content));
         history.push(`/users/${currentUserId}`);
     } catch (error) {
-        dispatch(usersRequestFailed(error.message));
+        dispatch(userUpdateFailed(error.message));
     }
 };
 
